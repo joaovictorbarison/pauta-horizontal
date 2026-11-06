@@ -142,3 +142,19 @@
     color: var(--color-foreground);
   }
 }
+
+.pauta-doc { max-width: 297mm; font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: var(--foreground); }
+.pauta-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.pauta-table th, .pauta-table td { border: 1px solid var(--foreground); padding: 4px 5px; vertical-align: middle; word-wrap: break-word; }
+.pauta-table th { font-weight: bold; text-align: center; background: var(--muted); }
+.pauta-table tr, .pauta-ciencia { page-break-inside: avoid; break-inside: avoid; }
+.pauta-table thead { display: table-header-group; }
+.pauta-doc [contenteditable]:focus { outline: 2px solid var(--ring); outline-offset: -2px; }
+
+@page { size: landscape; margin: 10mm; }
+@media print {
+  html, body { background: #fff; }
+  .pauta-doc { max-width: none; color: #000; }
+  .pauta-table th, .pauta-table td, .pauta-ciencia div { border-color: #000; }
+  .pauta-table th { background: transparent; }
+}
