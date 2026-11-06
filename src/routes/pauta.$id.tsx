@@ -32,7 +32,7 @@ function PautaPage() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(pautaQuery(Number(id)));
   const docRef = useRef<HTMLDivElement>(null);
-  const key = `pauta-edits-${id}`;
+  const key = `pauta-edits-v2-${id}`;
   const r = data.reuniao;
 
   // Restore saved edits (keyed by data-k) and autosave on input.
@@ -58,7 +58,6 @@ function PautaPage() {
   }, [key]);
 
   const tipoReuniao = /extraordin/i.test(data.descricao) ? "Extraordinária" : "Ordinária";
-  const ciencia = data.ciencia.length ? data.ciencia.join("\n\n") : "";
 
   return (
     <div className="min-h-screen bg-muted/40 print:bg-background">
@@ -72,6 +71,9 @@ function PautaPage() {
         >
           <RotateCcw className="h-4 w-4" /> Restaurar original
         </button>
+        {data.fonte && (
+          <a href={data.fonte} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Documento oficial</a>
+        )}
         <span className="text-xs text-muted-foreground">Clique em qualquer célula para editar — salvo automaticamente.</span>
         <button
           onClick={() => window.print()}
@@ -103,28 +105,42 @@ function PautaPage() {
             <tr>{COLS.map((c) => <th key={c}>{c === "Objeto" ? "OBJETO" : c}</th>)}</tr>
           </thead>
           <tbody>
-            {data.itens.map((it, i) => (
-              <tr key={i}>
-                <Cell k={`${i}-item`} className="text-center">{it.ordem}</Cell>
-                <Cell k={`${i}-prop`}>{it.tipo}<br />{it.numero}</Cell>
-                <Cell k={`${i}-autor`}>{it.autor}</Cell>
-                <Cell k={`${i}-obj`}>{it.objeto}</Cell>
-                <Cell k={`${i}-rel`}>{it.relator}</Cell>
-                <Cell k={`${i}-voto`}>{it.voto}</Cell>
-                <Cell k={`${i}-vista`}>{it.vista}</Cell>
-              </tr>
-            ))}
-            {data.itens.length === 0 && (
+            {data.linhas.map((it, i) =>
+              "secao" in it ? (
+                <tr key={i} className="pauta-secao">
+                  <Cell k={`${i}-secao`} colSpan={7}>{it.secao}</Cell>
+                </tr>
+              ) : (
+                <tr key={i}>
+                  <Cell k={`${i}-item`} className="text-center">{it.ordem}</Cell>
+                  <Cell k={`${i}-prop`}>{it.tipo}<br />{it.numero}</Cell>
+                  <Cell k={`${i}-autor`}>{it.autor}</Cell>
+                  <Cell k={`${i}-obj`}>{it.objeto}</Cell>
+                  <Cell k={`${i}-rel`}>{it.relator}</Cell>
+                  <Cell k={`${i}-voto`}>{it.voto}</Cell>
+                  <Cell k={`${i}-vista`}>{it.vista}</Cell>
+                </tr>
+              ),
+            )}
+            {data.linhas.length === 0 && (
               <tr><Cell k="empty" colSpan={7} className="text-center">Nenhuma proposição na pauta.</Cell></tr>
             )}
           </tbody>
         </table>
 
         <section className="pauta-ciencia mt-4">
-          <h2 className="mb-1 font-bold uppercase">Itens de ciência / Informações adicionais</h2>
-          <div data-k="ciencia" contentEditable suppressContentEditableWarning className="min-h-[3em] whitespace-pre-wrap border border-foreground p-2">
-            {ciencia}
-          </div>
+          <h2 className="mb-1 font-bold uppercase">Para ciência:</h2>
+          {data.ciencia.length === 0 ? (
+            <div data-k="ciencia" contentEditable suppressContentEditableWarning className="min-h-[3em] whitespace-pre-wrap border border-foreground p-2" />
+          ) : (
+            <div className="border border-foreground">
+              {data.ciencia.map((c, i) => (
+                <p key={i} data-k={`ciencia-${i}`} contentEditable suppressContentEditableWarning className="pauta-ciencia-item whitespace-pre-wrap p-2 text-justify">
+                  {c}
+                </p>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </div>
