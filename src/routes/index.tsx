@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(reunioesQuery),
   component: Index,
   errorComponent: ({ error }) => (
-    <div className="p-10 text-center text-destructive">Erro ao carregar reuniões: {error.message}</div>
+    <div className="p-10 text-center text-destructive">Erro ao carregar reuniões: {(error as Error).message}</div>
   ),
 });
 

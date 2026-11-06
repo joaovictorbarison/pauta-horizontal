@@ -22,7 +22,7 @@ export const Route = createFileRoute("/pauta/$id")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(pautaQuery(Number(params.id))),
   component: PautaPage,
   errorComponent: ({ error }) => (
-    <div className="p-10 text-center text-destructive">Erro ao carregar a pauta: {error.message}</div>
+    <div className="p-10 text-center text-destructive">Erro ao carregar a pauta: {(error as Error).message}</div>
   ),
 });
 
@@ -42,7 +42,7 @@ function PautaPage() {
     try {
       const saved = JSON.parse(localStorage.getItem(key) ?? "{}") as Record<string, string>;
       root.querySelectorAll<HTMLElement>("[data-k]").forEach((el) => {
-        const v = saved[el.dataset.k!];
+        const v = saved[el.dataset["k"]!];
         if (v !== undefined) el.innerHTML = v;
       });
     } catch { /* ignore */ }
@@ -50,7 +50,7 @@ function PautaPage() {
       const el = (e.target as HTMLElement).closest<HTMLElement>("[data-k]");
       if (!el) return;
       const saved = JSON.parse(localStorage.getItem(key) ?? "{}");
-      saved[el.dataset.k!] = el.innerHTML;
+      saved[el.dataset["k"]!] = el.innerHTML;
       localStorage.setItem(key, JSON.stringify(saved));
     };
     root.addEventListener("input", onInput);
