@@ -32,7 +32,7 @@ function PautaPage() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(pautaQuery(Number(id)));
   const docRef = useRef<HTMLDivElement>(null);
-  const key = `pauta-edits-${id}`;
+  const key = `pauta-edits-v2-${id}`;
   const r = data.reuniao;
 
   // Restore saved edits (keyed by data-k) and autosave on input.
