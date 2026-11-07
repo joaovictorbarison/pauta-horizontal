@@ -58,6 +58,20 @@ function PautaPage() {
   }, [key]);
 
   const tipoReuniao = /extraordin/i.test(data.descricao) ? "Extraordinária" : "Ordinária";
+  const secoes: { titulo?: string; indice: number; itens: { item: Exclude<(typeof data.linhas)[number], { secao: string }>; indice: number }[] }[] = [];
+  data.linhas.forEach((item, indice) => {
+    if ("secao" in item) {
+      secoes.push({ titulo: item.secao, indice, itens: [] });
+    } else {
+      let secao = secoes[secoes.length - 1];
+      if (!secao) {
+        secao = { indice, itens: [] };
+        secoes.push(secao);
+      }
+      secao.itens.push({ item, indice });
+    }
+  });
+  if (secoes.length === 0) secoes.push({ indice: 0, itens: [] });
 
   return (
     <div className="min-h-screen bg-muted/40 print:bg-background">
@@ -96,6 +110,13 @@ function PautaPage() {
           </p>
         </header>
 
+        {secoes.map((secao) => (
+          <section key={secao.indice} className="pauta-bloco">
+            {secao.titulo && (
+              <h2 data-k={`${secao.indice}-secao`} contentEditable suppressContentEditableWarning className="pauta-titulo-secao mb-2 text-center font-bold">
+                {secao.titulo}
+              </h2>
+            )}
         <table className="pauta-table">
           <colgroup>
             <col style={{ width: "4%" }} /><col style={{ width: "12%" }} /><col style={{ width: "13%" }} />
@@ -105,12 +126,7 @@ function PautaPage() {
             <tr>{COLS.map((c) => <th key={c}>{c === "Objeto" ? "OBJETO" : c}</th>)}</tr>
           </thead>
           <tbody>
-            {data.linhas.map((it, i) =>
-              "secao" in it ? (
-                <tr key={i} className="pauta-secao">
-                  <Cell k={`${i}-secao`} colSpan={7}>{it.secao}</Cell>
-                </tr>
-              ) : (
+            {secao.itens.map(({ item: it, indice: i }) => (
                 <tr key={i}>
                   <Cell k={`${i}-item`} className="text-center">{it.ordem}</Cell>
                   <Cell k={`${i}-prop`}>{it.tipo}<br />{it.numero}</Cell>
@@ -120,13 +136,14 @@ function PautaPage() {
                   <Cell k={`${i}-voto`}>{it.voto}</Cell>
                   <Cell k={`${i}-vista`}>{it.vista}</Cell>
                 </tr>
-              ),
-            )}
+              ))}
             {data.linhas.length === 0 && (
               <tr><Cell k="empty" colSpan={7} className="text-center">Nenhuma proposição na pauta.</Cell></tr>
             )}
           </tbody>
         </table>
+          </section>
+        ))}
 
         <section className="pauta-ciencia mt-4">
           <h2 className="mb-1 font-bold uppercase">Para ciência:</h2>

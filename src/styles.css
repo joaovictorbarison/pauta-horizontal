@@ -158,7 +158,8 @@
   .pauta-table th, .pauta-table td, .pauta-ciencia div { border-color: #000; }
   .pauta-table th { background: transparent; }
 }
-.pauta-secao td { font-weight: bold; text-align: center; background: var(--muted); }
+.pauta-bloco + .pauta-bloco { margin-top: 16px; }
+.pauta-titulo-secao { break-after: avoid; page-break-after: avoid; }
 .pauta-ciencia-item { page-break-inside: avoid; break-inside: avoid; }
 .pauta-ciencia-item + .pauta-ciencia-item { border-top: 1px solid var(--foreground); }
 .pauta-ciencia { page-break-inside: auto !important; break-inside: auto !important; }
