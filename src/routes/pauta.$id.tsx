@@ -165,7 +165,7 @@ function PautaPage() {
 function Cell({ k, children, className, colSpan }: { k: string; children: React.ReactNode; className?: string; colSpan?: number }) {
   return (
     <td data-k={k} contentEditable suppressContentEditableWarning className={className} colSpan={colSpan}>
-      {children}
+      <div className="pauta-cell-inner">{children}</div>
     </td>
   );
 }

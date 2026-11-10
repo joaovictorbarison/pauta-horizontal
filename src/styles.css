@@ -159,11 +159,35 @@
     background: #fff;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    height: auto !important;
+    overflow: visible !important;
   }
-  .pauta-doc { max-width: none; color: #000; }
-  .pauta-table { border-collapse: collapse; }
-  .pauta-table tr { break-inside: avoid !important; page-break-inside: avoid !important; }
-  .pauta-table td, .pauta-table th { break-inside: avoid !important; page-break-inside: avoid !important; }
+  .pauta-doc {
+    max-width: none;
+    color: #000;
+    overflow: visible !important;
+  }
+  .pauta-table {
+    border-collapse: collapse;
+    page-break-inside: auto;
+  }
+  .pauta-table tbody {
+    page-break-inside: auto;
+  }
+  .pauta-table tr {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .pauta-table td, .pauta-table th {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .pauta-cell-inner {
+    display: block;
+    height: auto !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
   .pauta-table th, .pauta-table td, .pauta-ciencia div { border-color: #000; }
   .pauta-table th { background: transparent; }
 }
