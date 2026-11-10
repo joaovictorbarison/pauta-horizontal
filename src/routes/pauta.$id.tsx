@@ -145,11 +145,9 @@ function PautaPage() {
           </section>
         ))}
 
-        <section className="pauta-ciencia mt-4">
-          <h2 className="mb-1 font-bold uppercase">Para ciência:</h2>
-          {data.ciencia.length === 0 ? (
-            <div data-k="ciencia" contentEditable suppressContentEditableWarning className="min-h-[3em] whitespace-pre-wrap border border-foreground p-2" />
-          ) : (
+        {data.ciencia && data.ciencia.length > 0 && (
+          <section className="pauta-ciencia mt-4">
+            <h2 className="mb-1 font-bold uppercase">Para ciência:</h2>
             <div className="border border-foreground">
               {data.ciencia.map((c, i) => (
                 <p key={i} data-k={`ciencia-${i}`} contentEditable suppressContentEditableWarning className="pauta-ciencia-item whitespace-pre-wrap p-2 text-justify">
@@ -157,8 +155,8 @@ function PautaPage() {
                 </p>
               ))}
             </div>
-          )}
-        </section>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -148,16 +148,26 @@
 .pauta-table th, .pauta-table td { border: 1px solid var(--foreground); padding: 4px 5px; vertical-align: middle; word-wrap: break-word; }
 .pauta-table th { font-weight: bold; text-align: center; background: var(--muted); }
 .pauta-table tr, .pauta-ciencia { page-break-inside: avoid; break-inside: avoid; }
+.pauta-table tr { break-inside: avoid; page-break-inside: avoid; }
+.pauta-table td, .pauta-table th { break-inside: avoid; page-break-inside: avoid; }
 .pauta-table thead { display: table-header-group; }
 .pauta-doc [contenteditable]:focus { outline: 2px solid var(--ring); outline-offset: -2px; }
 
 @page { size: landscape; margin: 10mm; }
 @media print {
-  html, body { background: #fff; }
+  html, body {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
   .pauta-doc { max-width: none; color: #000; }
+  .pauta-table { border-collapse: collapse; }
+  .pauta-table tr { break-inside: avoid !important; page-break-inside: avoid !important; }
+  .pauta-table td, .pauta-table th { break-inside: avoid !important; page-break-inside: avoid !important; }
   .pauta-table th, .pauta-table td, .pauta-ciencia div { border-color: #000; }
   .pauta-table th { background: transparent; }
 }
+.pauta-bloco { break-inside: auto; page-break-inside: auto; }
 .pauta-bloco + .pauta-bloco { margin-top: 16px; }
 .pauta-titulo-secao { break-after: avoid; page-break-after: avoid; }
 .pauta-ciencia-item { page-break-inside: avoid; break-inside: avoid; }
